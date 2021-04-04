@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 
 from api.db.database import Base, SessionLocal, engine
 from api.db import crud
-from api.schemas.schemas import AuditLogCreate
+from api.schemas import schemas
 
 
 Base.metadata.create_all(bind=engine)
@@ -23,7 +23,11 @@ def get_db():
         db.close()
 
 
-@router.post("/auditlog", response_model=AuditLogCreate)
-async def create_audit_log(audit_log: AuditLogCreate, db: Session = Depends(get_db)):
-    db_audit_log = crud.create_audit_log(db, audit_log)
-    return audit_log
+@router.post("/auditlog/", response_model=schemas.AuditLog)
+async def create_audit_log(audit_log: schemas.AuditLogCreate, db: Session = Depends(get_db)):
+    return crud.create_audit_log(db, audit_log)
+
+
+@router.post("/anomaly/", response_model=schemas.Anomaly)
+async def create_anomaly(anomaly: schemas.AnomalyCreate, db: Session = Depends(get_db)):
+    return crud.create_anomaly(db, anomaly)

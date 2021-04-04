@@ -1,4 +1,5 @@
-from typing import Optional
+from typing import List, Optional
+from datetime import datetime, timedelta
 
 from pydantic import BaseModel
 
@@ -9,8 +10,10 @@ class AuditLogBase(BaseModel):
     statement_type: str
     statement: str
     query: str
-    db_object_type: Optional[str]
-    db_object: Optional[str]
+    query_time: datetime
+    anomaly_id: Optional[str]
+    db_object_type: Optional[str] = ""
+    db_object: Optional[str] = ""
 
 
 class AuditLogCreate(AuditLogBase):
@@ -18,6 +21,25 @@ class AuditLogCreate(AuditLogBase):
 
 
 class AuditLog(AuditLogBase):
+    id: int
+
+    class Config:
+        orm_mode = True
+
+
+class AnomalyBase(BaseModel):
+    start_session_time: datetime
+    end_session_time: datetime
+    session: int
+    session_time: timedelta
+    dropped_session: bool
+
+
+class AnomalyCreate(AnomalyBase):
+    pass
+
+
+class Anomaly(AnomalyBase):
     id: int
 
     class Config:

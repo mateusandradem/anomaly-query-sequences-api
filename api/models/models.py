@@ -1,4 +1,4 @@
-from sqlalchemy import Column, ForeignKey, Integer, String
+from sqlalchemy import Column, Boolean, DateTime, ForeignKey, Integer, Interval, String
 from sqlalchemy.orm import relationship
 
 from api.db.database import Base
@@ -13,6 +13,7 @@ class AuditLog(Base):
     statement = Column(String)
     statement_type = Column(String)
     query = Column(String)
+    query_time = Column(DateTime)
     db_object_type = Column(String, default="")
     db_object = Column(String, default="")
     anomaly = relationship("Anomaly", back_populates="auditlogs")
@@ -24,3 +25,8 @@ class Anomaly(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     auditlogs = relationship("AuditLog", back_populates="anomaly")
+    start_session_time = Column(DateTime)
+    end_session_time = Column(DateTime)
+    session = Column(Integer)
+    session_time = Column(Interval)
+    dropped_session = Column(Boolean)
