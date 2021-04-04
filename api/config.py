@@ -1,5 +1,5 @@
-from pydantic import BaseSettings, PostgresDsn
 from prettyconf import config
+from pydantic import BaseSettings, PostgresDsn
 
 
 class Settings(BaseSettings):

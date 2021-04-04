@@ -1,12 +1,11 @@
 from typing import List
 
-from fastapi import Depends, APIRouter, HTTPException
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
-from api.db.database import Base, SessionLocal, engine
 from api.db import crud
+from api.db.database import Base, SessionLocal, engine
 from api.schemas import schemas
-
 
 Base.metadata.create_all(bind=engine)
 
@@ -24,7 +23,9 @@ def get_db():
 
 
 @router.get("/audit-logs/", response_model=List[schemas.AuditLog])
-async def read_audit_logs(offset: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+async def read_audit_logs(
+    offset: int = 0, limit: int = 100, db: Session = Depends(get_db)
+):
     audit_logs = crud.get_audit_logs(db, offset=offset, limit=limit)
     return audit_logs
 
@@ -33,24 +34,36 @@ async def read_audit_logs(offset: int = 0, limit: int = 100, db: Session = Depen
 async def read_audit_log(audit_log_id: int, db: Session = Depends(get_db)):
     db_audit_log = crud.get_audit_log(db, audit_log_id)
     if db_audit_log is None:
-        raise HTTPException(status_code=404, detail=f"Audit log with id:{audit_log_id} not found")
+        raise HTTPException(
+            status_code=404, detail=f"Audit log with id:{audit_log_id} not found"
+        )
     return db_audit_log
 
 
 @router.post("/audit-logs/", response_model=schemas.AuditLog)
-async def create_audit_log(audit_log: schemas.AuditLogCreate, db: Session = Depends(get_db)):
+async def create_audit_log(
+    audit_log: schemas.AuditLogCreate, db: Session = Depends(get_db)
+):
     db_anomaly = crud.get_anomaly(db, audit_log.anomaly_id)
     if db_anomaly is None:
-        raise HTTPException(status_code=400, detail=f"Does not exist an anomaly with id: {audit_log.anomaly_id}")
+        raise HTTPException(
+            status_code=400,
+            detail=f"Does not exist an anomaly with id: {audit_log.anomaly_id}",
+        )
 
     if db_anomaly.session != audit_log.session:
-        raise HTTPException(status_code=400, detail="Audit log does not have same session of referenced anomaly")
+        raise HTTPException(
+            status_code=400,
+            detail="Audit log does not have same session of referenced anomaly",
+        )
 
     return crud.create_audit_log(db, audit_log)
 
 
 @router.get("/anomalies/", response_model=List[schemas.Anomaly])
-async def read_anomalies(offset: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+async def read_anomalies(
+    offset: int = 0, limit: int = 100, db: Session = Depends(get_db)
+):
     anomalies = crud.get_anomalies(db, offset=offset, limit=limit)
     return anomalies
 
@@ -59,7 +72,9 @@ async def read_anomalies(offset: int = 0, limit: int = 100, db: Session = Depend
 async def read_anomaly(anomaly_id: int, db: Session = Depends(get_db)):
     db_anomaly = crud.get_anomaly(db, anomaly_id)
     if db_anomaly is None:
-        raise HTTPException(status_code=404, detail=f"Anonaly with id:{anomaly_id} not found")
+        raise HTTPException(
+            status_code=404, detail=f"Anonaly with id:{anomaly_id} not found"
+        )
     return db_anomaly
 
 

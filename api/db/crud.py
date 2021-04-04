@@ -29,7 +29,7 @@ def get_anomalies(db: Session, offset: int = 0, limit: int = 100):
     return db.query(models.Anomaly).offset(offset).limit(limit).all()
 
 
-def create_anomaly(db:Session, anomaly: schemas.Anomaly):
+def create_anomaly(db: Session, anomaly: schemas.Anomaly):
     db_anomaly = models.Anomaly(**anomaly.dict())
     db.add(db_anomaly)
     db.commit()
