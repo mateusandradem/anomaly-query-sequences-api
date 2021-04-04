@@ -12,13 +12,17 @@ def get_audit_logs(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.AuditLog).offset(skip).limit(limit).all()
 
 
-def create_audit_log(db:Session, audit_log: schemas.AuditLog):
+def create_audit_log(db: Session, audit_log: schemas.AuditLog):
     db_audit_log = models.AuditLog(**audit_log.dict())
     db.add(db_audit_log)
     db.commit()
     db.refresh(db_audit_log)
 
     return db_audit_log
+
+
+def get_anomaly(db: Session, anomaly_id: int):
+    return db.query(models.Anomaly).filter(models.Anomaly.id == anomaly_id).first()
 
 
 def create_anomaly(db:Session, anomaly: schemas.Anomaly):
