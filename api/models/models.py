@@ -1,10 +1,11 @@
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, ForeignKey, Integer, String
+from sqlalchemy.orm import relationship
 
 from api.db.database import Base
 
 
 class AuditLog(Base):
-    __tablename__ = "auditlog"
+    __tablename__ = "auditlogs"
 
     id = Column(Integer, primary_key=True, index=True)
     session = Column(Integer)
@@ -14,3 +15,12 @@ class AuditLog(Base):
     query = Column(String)
     db_object_type = Column(String, default="")
     db_object = Column(String, default="")
+    anomaly = relationship("Anomaly", back_populates="auditlogs")
+    anomaly_id = Column(Integer, ForeignKey("anomalies.id"))
+
+
+class Anomaly(Base):
+    __tablename__ = "anomalies"
+
+    id = Column(Integer, primary_key=True, index=True)
+    auditlogs = relationship("AuditLog", back_populates="anomaly")
