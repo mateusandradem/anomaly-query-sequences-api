@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
 from typing import List, Optional
 
-from pydantic import BaseModel
+from pydantic import BaseModel, validator
 
 
 class AuditLogBase(BaseModel):
@@ -28,11 +28,19 @@ class AuditLog(AuditLogBase):
 
 
 class AnomalyBase(BaseModel):
-    start_session_time: datetime
     end_session_time: datetime
+    start_session_time: datetime
     session: int
     session_time: timedelta
     dropped_session: bool
+
+    @validator("start_session_time")
+    def start_session_greater_than_end_session_times(cls, v, values, **kwargs):
+        if "end_session_time" in values and v >= values["end_session_time"]:
+            raise ValueError(
+                "start_session_time should be lesser than end_session_time"
+            )
+        return v
 
 
 class AnomalyCreate(AnomalyBase):
