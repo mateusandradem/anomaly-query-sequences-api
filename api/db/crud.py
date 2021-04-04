@@ -8,8 +8,8 @@ def get_audit_log(db: Session, audit_log_id: int):
     return db.query(models.AuditLog).filter(models.AuditLog.id == audit_log_id).first()
 
 
-def get_audit_logs(db: Session, skip: int = 0, limit: int = 100):
-    return db.query(models.AuditLog).offset(skip).limit(limit).all()
+def get_audit_logs(db: Session, offset: int = 0, limit: int = 100):
+    return db.query(models.AuditLog).offset(offset).limit(limit).all()
 
 
 def create_audit_log(db: Session, audit_log: schemas.AuditLog):
@@ -23,6 +23,10 @@ def create_audit_log(db: Session, audit_log: schemas.AuditLog):
 
 def get_anomaly(db: Session, anomaly_id: int):
     return db.query(models.Anomaly).filter(models.Anomaly.id == anomaly_id).first()
+
+
+def get_anomalies(db: Session, offset: int = 0, limit: int = 100):
+    return db.query(models.Anomaly).offset(offset).limit(limit).all()
 
 
 def create_anomaly(db:Session, anomaly: schemas.Anomaly):
