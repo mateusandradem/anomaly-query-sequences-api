@@ -11,7 +11,7 @@ class AuditLogBase(BaseModel):
     statement: str
     query: str
     query_time: datetime
-    anomaly_id: str
+    anomaly_id: int
     db_object_type: Optional[str] = ""
     db_object: Optional[str] = ""
 
