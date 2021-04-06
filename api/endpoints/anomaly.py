@@ -24,8 +24,7 @@ async def read_anomalies(
 
 @router.get("/anomalies/{anomaly_id}", response_model=schemas.Anomaly)
 async def read_anomaly(anomaly_id: int, db: Session = Depends(get_db)):
-    db_anomaly = crud.get_anomaly(db, anomaly_id)
-    if db_anomaly is None:
+    if (db_anomaly := crud.get_anomaly(db, anomaly_id)) is None:
         raise HTTPException(
             status_code=404, detail=f"Anonaly with id:{anomaly_id} not found"
         )
