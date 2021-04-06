@@ -5,7 +5,7 @@ from pydantic import BaseModel, validator
 
 
 class AuditLogBase(BaseModel):
-    session: int
+    db_session: int
     sequence: int
     statement_type: str
     statement: str
@@ -30,7 +30,7 @@ class AuditLog(AuditLogBase):
 class AnomalyBase(BaseModel):
     end_session_time: datetime
     start_session_time: datetime
-    session: int
+    db_session: int
     session_time: timedelta
     dropped_session: bool
 

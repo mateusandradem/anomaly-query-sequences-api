@@ -9,7 +9,7 @@ class AuditLog(Base):
     __tablename__ = "auditlogs"
 
     id = Column(Integer, primary_key=True, index=True)
-    session = Column(Integer)
+    db_session = Column(Integer)
     sequence = Column(Integer)
     statement = Column(String)
     statement_type = Column(String)
@@ -28,6 +28,6 @@ class Anomaly(Base):
     auditlogs = relationship("AuditLog", back_populates="anomaly")
     start_session_time = Column(DateTime)
     end_session_time = Column(DateTime)
-    session = Column(Integer)
+    db_session = Column(Integer)
     session_time = Column(Interval)
     dropped_session = Column(Boolean)
