@@ -12,6 +12,7 @@ prettyconf = ">=2.2.1"
 psycopg2 = ">=2.8.6"
 SQLAlchemy = ">=1.3.23"
 uvicorn = ">=0.13.4"
+pre-commit = "^2.19.0"
 
 [tool.poetry.dev-dependencies]
 pytest = ">=6.2.2"
