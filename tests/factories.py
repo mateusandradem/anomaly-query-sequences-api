@@ -4,11 +4,10 @@ from factory.alchemy import SQLAlchemyModelFactory
 from factory import SubFactory
 from fastapi import Depends
 
-from api.db.database import SessionLocal
 from api.models.models import Anomaly, AuditLog
+from tests.test_db_config import TestingSessionLocal
 
-
-session = SessionLocal()
+session = TestingSessionLocal()
 
 
 class AnomalyFactory(SQLAlchemyModelFactory):

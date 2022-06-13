@@ -2,6 +2,10 @@ import pytest
 from fastapi.testclient import TestClient
 
 from api.main import app
+from api.endpoints.utils import get_db
+from tests.test_db_config import override_get_db
+
+app.dependency_overrides[get_db] = override_get_db
 
 
 @pytest.fixture
